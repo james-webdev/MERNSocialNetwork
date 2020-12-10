@@ -14,13 +14,13 @@ const userSchema = new mongoose.Schema({
     email: {
 
         type: String,
-        required: 'title is required'
+        required: 'email is required'
     },
 
     password: {
 
         type: String,
-        required: 'title is required'
+        required: 'password is required'
     }
 
 

@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 
 
@@ -28,13 +29,10 @@ const userRoutes = require('./routes/user');
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 app.use('/', postRoutes);
 app.use('/', userRoutes);
-app.use(function(err, req, res, next) {
-    if (err.name === 'UnauthorizedError') {
-        res.status(401).json({ error: 'Unauthorised!' });
-    }
-});
+
 
 const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {

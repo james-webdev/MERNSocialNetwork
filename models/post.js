@@ -7,14 +7,14 @@ const postSchema = new mongoose.Schema({
     title: {
         
         type: String,
-        required: 'title is required'
+        
         
     },
 
     body: {
 
         type: String,
-        required: 'title is required'
+        
    
     },
 

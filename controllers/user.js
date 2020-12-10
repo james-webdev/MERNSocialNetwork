@@ -19,21 +19,20 @@ exports.userById = (req, res, next, id) => {
     };
     
     
-    exports.hasAuthorization = (req, res, next) =>{
-        const authorised = req.profile && req.auth && req.profile._id === req.auth._id
-        
+    exports.hasAuthorisation = (req, res, next) =>{
+        console.log('req.auth :', req.auth);
+        const authorised = req.profile && req.auth && req.profile._id == req.auth._id
         if(!authorised){
             res.json({message: 'you are not authorised to carry out this action'})
         }
         
     }
     
-    
-    
+
     exports.requireSignIn = expressJwt({
         secret: process.env.JWT_SECRET,
-        algorithms: ["HS256"], 
         userProperty: "auth",
+        algorithms: ["HS256"], 
     })
 
 exports.usersIndex = (req, res) => {
