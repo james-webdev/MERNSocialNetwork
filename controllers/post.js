@@ -22,7 +22,8 @@ exports.postShow = (req, res) => {
 exports.postsIndex = (req, res) => {
   const posts = Post.find()
     .populate("postedBy", "_id name")
-    .select("_id title body")
+    .select("_id title body created")
+    .sort({ created: -1 })
     .then((posts) => {
       res.json({ posts });
     })
@@ -90,3 +91,31 @@ exports.photo = (req, res, next) => {
   res.set("Content-Type", req.post.photo.contentType);
   return res.send(req.post.photo.data);
 };
+
+exports.postsByUserId = (req, res) => {
+  Post.find({ postedBy: req.profile._id })
+    .populate("postedBy", "_id name")
+    .select("_id title body created")
+    .sort("_created")
+    .exec((err, posts) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      res.json(posts);
+    });
+};
+
+// exports.postsByUserIdCount = (req, res, next) => {
+//   Post.find({ postedBy: req.profile._id }).countDocuments((err, count) => {
+//     if (err) {
+//       return res.status(400).json({
+//         error: err,
+//       });
+//     }
+//     console.log("here is your count", count);
+//     res.json(count);
+//   });
+//   next();
+// };
