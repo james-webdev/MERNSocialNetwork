@@ -2,6 +2,9 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 require("dotenv").config();
+const formidable = require("formidable");
+const fs = require("fs");
+const _ = require("lodash");
 
 exports.userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
@@ -81,4 +84,42 @@ exports.signOut = (req, res) => {
   res.clearCookie("myToken");
   console.log("signed out!");
   res.json({ message: "you have successfully signed out" });
+};
+
+exports.userProfilePhoto = (req, res) => {
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Image could not be uploaded",
+      });
+    }
+
+    let user = req.profile;
+
+    user = _.extend(user, fields);
+
+    if (files.photo) {
+      user.photo.data = fs.readFileSync(files.photo.path);
+      user.photo.contentType = files.photo.type;
+    }
+    user.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      console.log(result);
+      res.json(result);
+    });
+  });
+};
+
+exports.userPhoto = (req, res, next) => {
+  if (req.profile.photo.data) {
+    res.set(("Content-Type", req.profile.photo.contentType));
+    return res.send(req.profile.photo.data);
+  }
+  next();
 };
