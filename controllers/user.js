@@ -174,16 +174,31 @@ exports.removeFollowing = (req, res, next) => {
 
 exports.removeFollower = (req, res) => {
   User.findByIdAndUpdate(
-    req.body.unfollowId,
+    req.body.unFollowId,
     { $pull: { followers: req.body.userId } },
     { new: true }
-      .populate("followers", "name _id")
-      .populate("followers", "name _id")
-      .exec((err, result) => {
-        if (err) {
-          return res.status(400).json({ error: err });
-        }
-        res.json(result);
-      })
-  );
+  )
+    .populate("following", "_id name")
+    .populate("followers", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      res.json(result);
+    });
+};
+
+exports.getFollowers = (req, res, id) => {
+  const followers = User.findById(id)
+    .select("followers")
+    .exec((err, followers) => {
+      if (err || !followers) {
+        return res.status(400).json({
+          error: "Followers not ffound",
+        });
+      }
+      res.json({ followers });
+    });
 };

@@ -13,6 +13,7 @@ const {
   addFollowing,
   removeFollowing,
   removeFollower,
+  getFollowers,
 } = require("../controllers/user");
 
 mongoose.set("useFindAndModify", false);
@@ -21,6 +22,7 @@ const router = express.Router();
 
 router.put("/user/follow", addFollowing, addFollower);
 router.put("/user/unfollow", removeFollowing, removeFollower);
+router.get("/followers/:userId", userShow);
 router.get("/users", usersIndex);
 router.get("/user/:userId", userShow);
 router.put("/user/:userId", userProfilePhoto);
