@@ -9,12 +9,17 @@ const {
   photo,
   postsByUserId,
   postsByUserIdCount,
+  like,
+  unlike,
 } = require("../controllers/post");
 const { requireSignIn, userById } = require("../controllers/user");
 
 const router = express.Router();
-
 router.get("/posts", postsIndex);
+
+router.put("/post/like", like);
+router.put("/post/unlike", unlike);
+
 router.get("/post/:postId", postShow);
 router.delete("/post/:postId", requireSignIn, isPoster, deletePost);
 router.post("/post/new/:userId", requireSignIn, createPost);
