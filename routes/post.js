@@ -26,6 +26,7 @@ router.post("/post/new/:userId", requireSignIn, createPost);
 router.get("/post/photo/:postId", photo);
 router.get("/posts/by/:userId", postsByUserId);
 // router.get("/posts/count/:userId", postsByUserIdCount);
+router.delete("/post/:postId", isPoster, deletePost);
 
 router.param("userId", userById);
 router.param("postId", postById);
