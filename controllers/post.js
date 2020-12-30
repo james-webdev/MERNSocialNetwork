@@ -149,3 +149,38 @@ exports.unlike = (req, res) => {
     res.json(result);
   });
 };
+
+// exports.deletePostsByUserId = (req, res) => {
+//   Post.findByIdAndRemove({ postedBy: req.profile._id }).exec((err, posts) => {
+//     if (err) {
+//       return res.status(400).json({
+//         error: err,
+//       });
+//     }
+//     res.json({ message: "post succesfully deleted" });
+//   });
+// };
+// exports.deletePostsByUserId = (req, res, next) => {
+//   Post.findByIdAndRemove(req.profile._id, function (err, posts) {
+//     if (err) {
+//       return res.status(400).json({
+//         error: err,
+//       });
+//     } else {
+//       console.log("Removed posts : ", posts);
+//       res.json({ message: "posts succesfully deleted" });
+//     }
+//   });
+//   next();
+// // };
+
+exports.deletePostsByUserId = (req, res) => {
+  Post.find({ postedBy: req.profile._id }).deleteMany((err, posts) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    res.json(posts);
+  });
+};

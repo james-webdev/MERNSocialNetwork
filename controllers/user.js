@@ -202,3 +202,15 @@ exports.getFollowers = (req, res, id) => {
       res.json({ followers });
     });
 };
+
+exports.deleteUser = (req, res, next) => {
+  let user = req.profile;
+  user.remove((err, user) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+  });
+  next();
+};

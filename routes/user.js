@@ -14,7 +14,10 @@ const {
   removeFollowing,
   removeFollower,
   getFollowers,
+  deleteUser,
 } = require("../controllers/user");
+
+const { deletePostsByUserId } = require("../controllers/post");
 
 mongoose.set("useFindAndModify", false);
 
@@ -27,6 +30,8 @@ router.get("/users", usersIndex);
 router.get("/user/:userId", userShow);
 router.put("/user/:userId", userProfilePhoto);
 router.get("/user/photo/:userId", userPhoto);
+router.delete("/user/:userId", deleteUser, deletePostsByUserId);
+
 router.post("/signup", signUp);
 router.post("/signin", signIn);
 router.get("/signout", signOut);

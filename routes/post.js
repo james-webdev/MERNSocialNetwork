@@ -11,6 +11,7 @@ const {
   postsByUserIdCount,
   like,
   unlike,
+  deletePostsByUserId,
 } = require("../controllers/post");
 const { requireSignIn, userById } = require("../controllers/user");
 
@@ -27,6 +28,7 @@ router.get("/post/photo/:postId", photo);
 router.get("/posts/by/:userId", postsByUserId);
 // router.get("/posts/count/:userId", postsByUserIdCount);
 router.delete("/post/:postId", isPoster, deletePost);
+// router.delete("/posts/by/:userId", deletePostsByUserId);
 
 router.param("userId", userById);
 router.param("postId", postById);
