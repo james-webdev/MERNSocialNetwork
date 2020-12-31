@@ -6,7 +6,12 @@ exports.isPoster = (req, res, next) => {
   console.log("req.auth :", req.auth);
   console.log("req.post :", req.post);
   console.log("req.post.postedBy._id :", req.post.postedBy._id);
-  let isPoster = req.post && req.auth && req.post.postedBy._id == req.auth._id;
+  let sameUser = req.post && req.auth && req.post.postedBy._id == req.auth._id;
+  let adminUser = req.post && req.auth && req.auth.role === "admin";
+  let isPoster = sameUser || adminUser;
+
+  console.log("SAMEUSER", sameUser, "ADMINUSER", adminUser);
+
   console.log(isPoster);
   if (!isPoster) {
     res.json({ message: "you are not authorised to carry out this action" });
@@ -61,7 +66,7 @@ exports.createPost = (req, res) => {
 
 exports.postById = (req, res, next, id) => {
   Post.findById(id)
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name role")
     .exec((err, post) => {
       console.log(post);
       if (err || !post) {

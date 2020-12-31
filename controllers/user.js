@@ -22,11 +22,17 @@ exports.userById = (req, res, next, id) => {
 };
 
 exports.hasAuthorisation = (req, res, next) => {
-  console.log("req.auth :", req.auth);
-  const authorised = req.profile && req.auth && req.profile._id == req.auth._id;
+  let sameUser = req.profile && req.auth && req.profile._id == req.auth._id;
+  let adminUser = req.profile && req.auth && req.auth.role === "admin";
+
+  const authorised = sameUser || adminUser;
+
   if (!authorised) {
-    res.json({ message: "you are not authorised to carry out this action" });
+    return res.status(403).json({
+      error: "you are not authorised to carry out this action",
+    });
   }
+  next();
 };
 
 exports.requireSignIn = expressJwt({
@@ -37,7 +43,7 @@ exports.requireSignIn = expressJwt({
 
 exports.usersIndex = (req, res) => {
   const users = User.find()
-    .select("name email password")
+    .select("name email password role")
     .then((users) => {
       res.json(users);
     })
@@ -73,13 +79,16 @@ exports.signIn = (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { _id: user._id, role: user.role },
+      process.env.JWT_SECRET
+    );
     res.cookie("myToken", token, { expire: new Date() + 5555 });
     console.log("USER :", user);
     console.log("TOKEN :", token);
 
-    const { _id, name, email } = user;
-    return res.json({ token, user: { _id, email, name } });
+    const { _id, name, email, role } = user;
+    return res.json({ token, user: { _id, email, name, role } });
   });
 };
 
