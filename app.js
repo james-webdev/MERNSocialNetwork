@@ -30,8 +30,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-app.use('/', postRoutes);
-app.use('/', userRoutes);
+app.use('/api', postRoutes);
+app.use('/api', userRoutes);
 
 
 const port = process.env.PORT || 8000;

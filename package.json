@@ -4,7 +4,8 @@
   "description": "backend for mern social ",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon run app.js"
+    "dev": "nodemon run app.js",
+    "start": "node app.js"
   },
   "keywords": [
     "node",
@@ -25,5 +26,8 @@
     "mongoose": "^5.11.5",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.6"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }
